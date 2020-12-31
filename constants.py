@@ -24,7 +24,8 @@ def get_idx_list(atrb_name):
 
 ############################################# path constants ###########################################################
 ############################################# Modify according to your needs ###########################################
-resources_root = '/is/cluster/scratch/pghosh/GIF_resources'
+#resources_root = '/is/cluster/scratch/pghosh/GIF_resources'
+resources_root = '/home/pzh/Documents/GIF-master/GIF_resources'
 input_root_dir = f'{resources_root}/input_files'
 # DECA and FLAME Resource files
 deca_inferred_root = f'{input_root_dir}/DECA_inferred'

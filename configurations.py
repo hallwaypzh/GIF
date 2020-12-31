@@ -240,7 +240,7 @@ def update_config(parser):
     if args.sched and not args.debug:
         # args.lr = {128: 0.0015, 256: 0.003126094126388248, 512: 0.003, 1024: 0.003}
         args.lr = {128: 0.0, 256: 0.0, 512: 0.0, 1024: 0.0}
-        args.batch = {4: 512, 8: 256, 16: 128, 32: 64, 64: 32, 128: 32, 256: 16, 512: 16, 1024: 16}  # can take bigger batches!
+        args.batch = {4: 512, 8: 256, 16: 128, 32: 64, 64: 32, 128: 32, 256: 4, 512: 16, 1024: 16}  # can take bigger batches!
         # args.batch = {128: 20, 256: 20, 512: 16}  # can take bigger batches!
 
     else:
@@ -250,9 +250,11 @@ def update_config(parser):
     args.gen_sample = {512: (8, 4), 1024: (4, 2)}
 
     if args.debug:
-        args.batch_default = 4
+        #args.batch_default = 4
+        args.batch_default = 1
     else:
         args.batch_default = 16
+        #args.batch_default = 32
 
     if args.embedding_vocab_size != 1:
         args.embedding_vocab_size = len(dataset)

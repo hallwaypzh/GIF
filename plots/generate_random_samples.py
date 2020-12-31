@@ -18,6 +18,8 @@ from copy import deepcopy
 from my_utils.photometric_optimization.models import FLAME
 from my_utils.photometric_optimization import util
 
+import cv2
+
 
 def ge_gen_in(flm_params, textured_rndr, norm_map, normal_map_cond, texture_cond):
     if normal_map_cond and texture_cond:
@@ -118,7 +120,9 @@ for i, key in enumerate(fl_param_dict):
     if i == num_smpl_to_eval_on - 1:
         break
 
-batch_size = 32
+#batch_size = 32
+
+batch_size = 1
 
 num_sigmas = 1
 corruption_sigma = np.linspace(0, 1.5, num_sigmas)
@@ -221,6 +225,13 @@ for run_idx in run_ids_1:
                 step=step_max, alpha=alpha,
                 input_indices=identity_embeddings.cpu().numpy())
 
+            im1 = torch.clamp(mdl_1_gen_images, -1, 1).cpu()[0,:,:,:].permute(1, 2, 0).numpy() 
+            im1 = (im1 + 1) / 2.0
+            #im1 = im1[0,:,:, :]
+            #print(im1.shape)
+            im1 = cv2.cvtColor(im1, cv2.COLOR_RGB2BGR)
+            cv2.imshow('frame', im1)
+            cv2.waitKey(0)
             params_to_save['identity_indices'].append(identity_embeddings.cpu().detach().numpy())
             # import ipdb; ipdb.set_trace()
             images[batch_idx:batch_idx+batch_size_true] = torch.clamp(mdl_1_gen_images, -1, 1).cpu().numpy()

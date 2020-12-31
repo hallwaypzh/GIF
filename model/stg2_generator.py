@@ -17,7 +17,9 @@ from model import mesh_and_3d_helpers
 from my_utils.photometric_optimization import gif_helper
 from my_utils.photometric_optimization import util
 
-
+import cv2
+import os
+from torchvision import transforms
 class ConstantInput(nn.Module):
     def __init__(self, channel, size=4, constant_background=False):
         super().__init__()
@@ -312,6 +314,20 @@ class StyledGenerator(nn.Module):
                 size = 4 * 2 ** i
                 noise[i] = F.interpolate(input[0], size=(size, size), mode='bilinear', align_corners=False)
                 noise[i].input_name = f'cnd_{size}X{size}'
+        
+        #show the noises/ conditions
+        for i in range(noise[-1].shape[0]):
+            im1 = noise[-1][i][0:3][:][:].cpu().permute(1, 2, 0).numpy()
+            im2 = noise[-1][i][3: ][:][:].cpu().permute(1, 2, 0).numpy()
+            #print(im1.shape, im2.shape)
+            im1 = cv2.cvtColor(np.array(im1), cv2.COLOR_RGB2BGR)
+            im2 = cv2.cvtColor(im2, cv2.COLOR_RGB2BGR)
+            cv2.imshow('frame', im1)
+            
+            #cv2.imwrite('1.jpg', im1)
+            cv2.waitKey(0)
+            cv2.imshow('frame', im2)
+            cv2.waitKey(0)
 
         if mean_style is not None:
             styles_norm = []

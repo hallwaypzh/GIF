@@ -250,8 +250,8 @@ def train(args, dataset, generator, discriminator_flm, fid_computer, flame_param
             generic_utils.accumulate(g_running, generator, decay=0.5 ** (32 / (10 * 1000)))
 
             generic_utils.requires_grad(generator, False)
-
-        if (i + 1) % 1000 == 0:
+        if (i + 1) % 100 == 0:
+        #if (i + 1) % 1000 == 0:
             md_chk_pt_name = f'{cnst.output_root}checkpoint/{str(args.run_id)}/{str(i + 1).zfill(6)}_{alpha}.model'
 
             chk_pt_dict = {'generator_running': g_running.state_dict(),
