@@ -20,6 +20,8 @@ from my_utils.photometric_optimization import util
 import cv2
 import os
 from torchvision import transforms
+from matplotlib import pyplot as plt 
+
 class ConstantInput(nn.Module):
     def __init__(self, channel, size=4, constant_background=False):
         super().__init__()
@@ -299,7 +301,7 @@ class StyledGenerator(nn.Module):
         batch = input[0].shape[0]
 
         # import ipdb; ipdb.set_trace()
-
+        print(noise)
         if noise is None:
             noise = []
 
@@ -319,15 +321,20 @@ class StyledGenerator(nn.Module):
         for i in range(noise[-1].shape[0]):
             im1 = noise[-1][i][0:3][:][:].cpu().permute(1, 2, 0).numpy()
             im2 = noise[-1][i][3: ][:][:].cpu().permute(1, 2, 0).numpy()
+            plt.subplot(121)
+            plt.imshow(im1)
+            plt.subplot(122)
+            plt.imshow(im2)
+            plt.show()
             #print(im1.shape, im2.shape)
-            im1 = cv2.cvtColor(np.array(im1), cv2.COLOR_RGB2BGR)
-            im2 = cv2.cvtColor(im2, cv2.COLOR_RGB2BGR)
-            cv2.imshow('frame', im1)
+            #im1 = cv2.cvtColor(np.array(im1), cv2.COLOR_RGB2BGR)
+            #im2 = cv2.cvtColor(im2, cv2.COLOR_RGB2BGR)
+            #cv2.imshow('frame', im1)
             
             #cv2.imwrite('1.jpg', im1)
-            cv2.waitKey(0)
-            cv2.imshow('frame', im2)
-            cv2.waitKey(0)
+            #cv2.waitKey(0)
+            #cv2.imshow('frame', im2)
+            #cv2.waitKey(0)
 
         if mean_style is not None:
             styles_norm = []

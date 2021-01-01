@@ -19,7 +19,7 @@ from my_utils.photometric_optimization.models import FLAME
 from my_utils.photometric_optimization import util
 
 import cv2
-
+from matplotlib import pyplot as plt
 
 def ge_gen_in(flm_params, textured_rndr, norm_map, normal_map_cond, texture_cond):
     if normal_map_cond and texture_cond:
@@ -67,7 +67,8 @@ core_tensor_res = 4
 resolution = 256
 alpha = 1
 step_max = int(np.log2(resolution) - 2)
-num_smpl_to_eval_on = 128
+#num_smpl_to_eval_on = 128
+num_smpl_to_eval_on = 4
 use_styled_conv_stylegan2 = True
 
 flength = 5000
@@ -227,11 +228,14 @@ for run_idx in run_ids_1:
 
             im1 = torch.clamp(mdl_1_gen_images, -1, 1).cpu()[0,:,:,:].permute(1, 2, 0).numpy() 
             im1 = (im1 + 1) / 2.0
+            plt.imshow(im1)
+            plt.show()
+            #im1 = (im1 + 1) / 2.0
             #im1 = im1[0,:,:, :]
             #print(im1.shape)
-            im1 = cv2.cvtColor(im1, cv2.COLOR_RGB2BGR)
-            cv2.imshow('frame', im1)
-            cv2.waitKey(0)
+            #im1 = cv2.cvtColor(im1, cv2.COLOR_RGB2BGR)
+            #cv2.imshow('frame', im1)
+            #cv2.waitKey(0)
             params_to_save['identity_indices'].append(identity_embeddings.cpu().detach().numpy())
             # import ipdb; ipdb.set_trace()
             images[batch_idx:batch_idx+batch_size_true] = torch.clamp(mdl_1_gen_images, -1, 1).cpu().numpy()
